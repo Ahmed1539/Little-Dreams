@@ -2,7 +2,7 @@ import React from 'react';
 // 1. Import the exact filenames including .png
 import balletGirlImg from '../assets/ballet-girl-look.png';
 import balletGirlImg2 from '../assets/girl-look-cutout(2).png';
-import balletGirlImg3 from '../assets/girl in tringe.png';
+import balletGirlImg3 from '../assets/girl-in-tringe.png';
 import BoyImg1 from '../assets/boy1.png';
 import BoyImg2 from '../assets/boy2.png';
 // 2. Map each look ID to its specific image
