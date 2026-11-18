@@ -2,12 +2,12 @@
 - Little Dreams - Complete Lookbook Catalog
 - Featuring high-resolution 2K models and full Front & Back 3D piece inspection data.
  */
-import frontJacketImg from '../assets/Front jacket.png';
-import backJacketImg from '../assets/back jacket.png';
-import frontPantsImg from '../assets/pants front.png';
-import backPantsImg from '../assets/pants back.png';
-import frontTringeImg from '../assets/tringe front.png';
-import backTringeImg from '../assets/tringe back.png';
+import frontJacketImg from '../assets/Front-jacket.png';
+import backJacketImg from '../assets/back-jacket.png';
+import frontPantsImg from '../assets/pants-front.png';
+import backPantsImg from '../assets/pants-back.png';
+import frontTringeImg from '../assets/tringe-front.png';
+import backTringeImg from '../assets/tringe-back.png';
 import frontJacketBoy2Img from '../assets/front-jacket-boy2.png';
 import backJacketBoy2Img from '../assets/back-jacket-boy2.png';
 import frontRedDressImg from '../assets/front-red-dress.png';
