@@ -21,11 +21,23 @@ export default function CollectionSection({ onAddToBag }) {
       {/* Background Dot Grid Pattern & Whimsical Doodles */}
       <div className="absolute inset-0 opacity-[0.06] pointer-events-none bg-[radial-gradient(#0E2340_1.5px,transparent_1.5px)] [background-size:18px_18px]" />
       
-      {/* Scattered Background Stars and Doodles */}
-      <div className="absolute top-10 left-12 text-3xl text-[#0E2340] opacity-[0.08] select-none pointer-events-none rotate-12">✨</div>
-      <div className="absolute top-16 right-20 text-4xl text-[#0E2340] opacity-[0.07] select-none pointer-events-none -rotate-12">☁️</div>
-      <div className="absolute bottom-16 left-20 text-3xl text-[#0E2340] opacity-[0.08] select-none pointer-events-none rotate-45">★</div>
-      <div className="absolute bottom-10 right-28 text-4xl text-[#0E2340] opacity-[0.07] select-none pointer-events-none rotate-12">🌙</div>
+      {/* Scattered Background Stars and Doodles (More density, small and playful) */}
+      <div className="absolute top-8 left-[6%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[-15deg]">✨</div>
+      <div className="absolute top-12 left-[24%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[10deg]">☁️</div>
+      <div className="absolute top-7 left-[42%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[35deg]">🌙</div>
+      <div className="absolute top-10 right-[30%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[-18deg]">★</div>
+      <div className="absolute top-6 right-[12%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[12deg]">✨</div>
+      
+      <div className="absolute top-[44%] left-[5%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[-25deg]">🌙</div>
+      <div className="absolute top-[52%] left-[16%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[22deg]">✨</div>
+      <div className="absolute top-[42%] right-[7%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[15deg]">☁️</div>
+      <div className="absolute top-[55%] right-[18%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[-12deg]">★</div>
+
+      <div className="absolute bottom-10 left-[12%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[-10deg]">☁️</div>
+      <div className="absolute bottom-6 left-[32%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[25deg]">✨</div>
+      <div className="absolute bottom-8 left-[58%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[8deg]">🌙</div>
+      <div className="absolute bottom-9 right-[24%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[22deg]">★</div>
+      <div className="absolute bottom-12 right-[8%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[-15deg]">☁️</div>
 
       {/* Ambient Glow Orbs */}
       <div className="absolute top-10 left-1/4 w-96 h-96 rounded-full bg-[#FFB5C5]/[0.05] blur-3xl pointer-events-none" />

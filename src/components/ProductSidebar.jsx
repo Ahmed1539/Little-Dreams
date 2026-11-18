@@ -5,16 +5,17 @@ export default function ProductSidebar({
   activeHotspot,
   onSelectHotspot,
   onAddToCart,
-  onAddBundle,
   onOpenItemModal
 }) {
   const isBoy = currentLook.gender === 'boy';
   const theme = currentLook.theme;
   const items = currentLook.items;
-  const bundle = currentLook.bundle;
+
+  // Calculate total price of all items in the look
+  const totalPrice = items.reduce((sum, item) => sum + item.price, 0);
 
   return (
-    <aside className="w-full lg:w-[380px] xl:w-[420px] flex-shrink-0 lg:h-full lg:overflow-y-auto bg-white/95 backdrop-blur-md border-t lg:border-t-0 lg:border-l border-black/5 shadow-2xl flex flex-col justify-between p-6 sm:p-8 z-30 select-none theme-transition">
+    <aside className="hidden lg:flex w-[380px] xl:w-[420px] flex-shrink-0 h-full overflow-y-auto bg-white/95 backdrop-blur-md border-l border-black/5 shadow-2xl flex-col justify-between p-8 z-30 select-none theme-transition">
       {/* Top Header & Whimsical Doodle Badge */}
       <div>
         <div className="flex items-start justify-between">
@@ -82,7 +83,7 @@ export default function ProductSidebar({
               >
                 {/* Left: Thumbnail & Number Badge */}
                 <div className="flex items-center gap-3.5">
-                  <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200/80 flex-shrink-0">
+                  <div className="relative w-16 h-16 rounded-xl bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200/80 flex-shrink-0">
                     <img 
                       src={item.image} 
                       alt={item.name} 
@@ -102,14 +103,14 @@ export default function ProductSidebar({
                     <span className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">
                       {item.brand}
                     </span>
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-800 leading-snug group-hover:text-slate-900 flex items-center gap-1.5">
+                    <h3 className="text-sm font-bold text-slate-800 leading-snug group-hover:text-slate-900 flex items-center gap-1.5">
                       <span>{item.name}</span>
                       <span className="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity font-normal">
                         (3D ↺)
                       </span>
                     </h3>
-                    <div className="flex items-center gap-2 mt-0.5 sm:mt-1">
-                      <span className="text-xs sm:text-sm font-semibold text-slate-700">
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-sm font-semibold text-slate-700">
                         ${item.price.toFixed(2)}
                       </span>
                       <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 font-medium">
@@ -156,50 +157,25 @@ export default function ProductSidebar({
         </div>
       </div>
 
-      {/* Bottom Summary & Full Look CTA */}
+      {/* Bottom Total Price & Guarantee */}
       <div className="pt-5 border-t border-slate-200/70 mt-4">
-        <div className="flex items-baseline justify-between mb-1">
+        <div className="flex items-center justify-between">
           <div>
             <h4 className="text-sm font-bold text-slate-800">
-              {bundle.label}
+              Total Look Price
             </h4>
-            <p className="text-xs font-semibold text-emerald-600">
-              {bundle.discountNote}
+            <p className="text-xs text-slate-400 font-medium">
+              {items.length} {items.length === 1 ? 'item' : 'items'} included
             </p>
           </div>
 
-          <div className="text-right">
-            <span className="text-xs text-slate-400 line-through mr-2">
-              ${bundle.originalPrice.toFixed(2)}
-            </span>
-            <span className="text-lg font-extrabold text-slate-900">
-              ${bundle.bundlePrice.toFixed(2)}
-            </span>
-          </div>
+          <span className="text-2xl font-extrabold text-slate-900">
+            ${totalPrice.toFixed(2)}
+          </span>
         </div>
 
-        {/* CTA Button: "Add full look to bag ->" */}
-        <button
-          onClick={() => onAddBundle(currentLook)}
-          className="mt-3.5 w-full py-3.5 px-6 rounded-xl text-white font-bold text-sm tracking-wide flex items-center justify-center gap-3 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98] group"
-          style={{
-            backgroundColor: theme.buttonBg,
-            boxShadow: `0 10px 25px -5px ${theme.glowColor}`
-          }}
-        >
-          <span>Add full look to bag</span>
-          <svg 
-            className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </button>
-
         {/* Guarantee details */}
-        <div className="mt-2.5 flex items-center justify-center gap-4 text-[11px] text-slate-400 font-medium">
+        <div className="mt-4 flex items-center justify-center gap-4 text-[11px] text-slate-400 font-medium">
           <span className="flex items-center gap-1">
             <svg className="w-3.5 h-3.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>

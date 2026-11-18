@@ -5,6 +5,7 @@ import balletGirlImg2 from '../assets/girl-look-cutout(2).png';
 import balletGirlImg3 from '../assets/Girl-in-tringe.png';
 import BoyImg1 from '../assets/boy1.png';
 import BoyImg2 from '../assets/boy2.png';
+
 // 2. Map each look ID to its specific image
 const LOOK_IMAGES = {
   '01': balletGirlImg,
@@ -12,7 +13,6 @@ const LOOK_IMAGES = {
   '03': balletGirlImg2,
   '04': BoyImg2,
   '05': balletGirlImg3,
-  // Add '03' and '04' here once you add and import their image files
 };
 
 export default function ModelAvatar({ 
@@ -30,7 +30,9 @@ export default function ModelAvatar({
     if (!isActive) return;
     
     onSelectHotspot(spotId);
-    const correspondingItem = look.items.find(i => i.num === spotId) || look.items[0];
+    const correspondingItem =
+      look.items.find((i) => Number(i.num) === Number(spotId)) || look.items[0];
+      
     if (onOpenItemModal && correspondingItem) {
       onOpenItemModal(correspondingItem);
     }
@@ -41,9 +43,9 @@ export default function ModelAvatar({
       {/* Main Model Image Container */}
       <div className="relative z-10 w-64 sm:w-72 h-[380px] sm:h-[410px] flex items-center justify-center">
         <div 
-          className="relative w-full h-full flex items-center justify-center transition-transform duration-700"
+          className="relative w-full h-full flex items-center justify-center transition-transform duration-300 ease-out pointer-events-none"
           style={{
-            transform: isActive ? 'scale(1.08)' : 'scale(0.92)'
+            transform: isActive ? 'scale(1.03)' : 'scale(0.96)'
           }}
         >
           {/* Ambient ground shadow beneath shoes */}
@@ -56,7 +58,7 @@ export default function ModelAvatar({
           <img 
             src={modelImage} 
             alt={look.name || `Look ${look.id}`}
-            className="w-full h-full object-contain filter drop-shadow-2xl transition-all duration-500 hover:scale-[1.02]"
+            className="w-full h-full object-contain filter drop-shadow-2xl transition-transform duration-200"
             style={{
               filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.25)) contrast(1.04) brightness(1.02)'
             }}
@@ -64,16 +66,27 @@ export default function ModelAvatar({
         </div>
 
         {/* INVISIBLE CLICKABLE GARMENT ZONES */}
-        {isActive && look.model?.hotspots?.map((spot) => (
-          <button
-            key={spot.id}
-            onClick={(e) => handleItemClick(e, spot.id)}
-            style={{ top: spot.top, left: spot.left }}
-            className="absolute -translate-x-1/2 -translate-y-1/2 w-24 h-20 rounded-2xl bg-transparent cursor-pointer z-30 focus:outline-none"
-            aria-label={`Inspect ${spot.label}`}
-          />
-        ))}
+        {isActive && look.model?.hotspots?.map((spot) => {
+          const isPants = Number(spot.id) === 2;
+          return (
+            <button
+              key={spot.id}
+              type="button"
+              onClick={(e) => handleItemClick(e, spot.id)}
+              style={{
+                top: isPants ? '68%' : spot.top,
+                left: spot.left,
+              }}
+              className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-transparent cursor-pointer focus:outline-none ${
+                isPants
+                  ? 'w-28 h-28 z-30' // Larger, non-overlapping lower hitbox for pants
+                  : 'w-28 h-24 z-20' // Upper torso hitbox for jacket/top
+              }`}
+              aria-label={`Inspect ${spot.label}`}
+            />
+          );
+        })}
       </div>
     </div>
   );
-} 
+}

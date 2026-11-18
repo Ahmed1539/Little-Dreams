@@ -69,7 +69,7 @@ export default function Carousel3D({
       }}
     >
       {/* Top Headline & Subtitle */}
-      <div className="pt-4 sm:pt-6 lg:pt-8 px-6 sm:px-12 max-w-xl z-20 flex-shrink-0">
+      <div className="pt-4 sm:pt-6 lg:pt-8 px-6 sm:px-12 max-w-xl z-20 flex-shrink-0 pointer-events-none">
         <h1 
           className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight theme-transition font-serif leading-tight"
           style={{ color: activeLook.theme.textColor }}
@@ -116,17 +116,19 @@ export default function Carousel3D({
             const opacity = isActive ? 1 : isNeighbor ? 0.65 : 0.25;
             const blur = isActive ? '0px' : isNeighbor ? '1.5px' : '4px';
             const scale = isActive ? 1.05 : isNeighbor ? 0.82 : 0.65;
-            const zIndex = isActive ? 40 : 20 - Math.abs(offset);
+            const zIndex = isActive ? 50 : 10 - Math.abs(offset);
 
             return (
               <div
                 key={look.id}
                 onClick={(e) => {
-                  e.stopPropagation();
-                  onSelectLook(index);
+                  if (!isActive) {
+                    e.stopPropagation();
+                    onSelectLook(index);
+                  }
                 }}
-                className={`transition-all duration-700 ease-out cursor-pointer flex items-center justify-center ${
-                  isActive ? 'pointer-events-auto' : 'pointer-events-auto hover:opacity-90'
+                className={`transition-all duration-700 ease-out flex items-center justify-center ${
+                  isActive ? 'pointer-events-auto cursor-default' : 'pointer-events-auto cursor-pointer hover:opacity-90'
                 }`}
                 style={{
                   position: 'absolute',
@@ -153,10 +155,6 @@ export default function Carousel3D({
           })}
         </div>
       </div>
-
-      {/* Floating 3D Interaction Hint */}
-
     </div>
   );
 }
- 

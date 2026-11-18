@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, Link, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Carousel3D from './components/Carousel3D';
 import ProductSidebar from './components/ProductSidebar';
@@ -8,14 +8,34 @@ import DoodleBackground from './components/DoodleBackground';
 import ItemFlipModal from './components/ItemFlipModal';
 import CollectionSection from './components/CollectionSection';
 import BagPage from './pages/BagPage';
+import TermsPage from './pages/TermsPage';
+import PrivacyPage from './pages/PrivacyPage';
+import DeliveryReturnsPage from './pages/DeliveryReturnsPage';
+import SizeGuidePage from './pages/SizeGuidePage';
+import RefundPolicyPage from './pages/RefundPolicyPage';
+import AboutPage from './pages/AboutPage';
+import HowToPurchasePage from './pages/HowToPurchasePage';
+import ContactPage from './pages/ContactPage';
 import { LOOKS_DATA } from './data/looksData';
 
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <MainApp />
     </BrowserRouter>
   );
+}
+
+// ScrollToTop component that instantly scrolls to the top on route change
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
 }
 
 function MainApp() {
@@ -129,118 +149,137 @@ function MainApp() {
   const totalCartCount = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
 
   return (
-    <Routes>
-      {/* Route 1: Home Page */}
-      <Route
-        path="/"
-        element={
-          <div className="min-h-screen w-full flex flex-col font-sans relative overflow-x-hidden">
-            <div
-              className="w-full flex flex-col relative theme-transition"
-              style={{
-                background: currentLook.theme.bgGradient,
-              }}
-            >
-              {/* Top Navigation - Routes to /bag on click */}
-              <Navbar
-                currentLook={currentLook}
-                cartCount={totalCartCount}
-                onCartClick={() => navigate('/bag')}
-              />
+    <div className="min-h-screen w-full flex flex-col font-sans relative overflow-x-hidden">
+      {/* Persistent Navbar across all routes */}
+      <div
+        className="w-full flex flex-col relative theme-transition"
+        style={{
+          background: currentLook.theme.bgGradient,
+        }}
+      >
+        <Navbar
+          currentLook={currentLook}
+          cartCount={totalCartCount}
+          onCartClick={() => navigate('/bag')}
+        />
+      </div>
 
-              {/* Main 3D Hero Layout */}
-              <main className="flex-1 w-full flex flex-col lg:flex-row relative z-10 lg:h-[calc(100vh-4rem)] lg:overflow-hidden">
-                <DoodleBackground theme={currentLook.theme} gender={currentLook.gender} />
-
-                <section className="flex-1 flex flex-col justify-between relative min-h-[640px] lg:min-h-0 lg:h-full overflow-hidden">
-                  <div className="flex-1 flex flex-col relative w-full h-full min-h-0">
-                    <Carousel3D
-                      looks={LOOKS_DATA}
-                      currentIndex={currentIndex}
-                      onSelectLook={handleSelectLook}
-                      activeHotspot={activeHotspot}
-                      onSelectHotspot={setActiveHotspot}
-                      onOpenItemModal={(item) => setInspectedItem(item)}
-                      isPaused={!isPlaying || inspectedItem !== null}
-                    />
-                  </div>
-
-                  <div className="flex-shrink-0 w-full relative z-20">
-                    <BottomControls
-                      looks={LOOKS_DATA}
-                      currentIndex={currentIndex}
-                      onSelectLook={handleSelectLook}
-                      isPlaying={isPlaying && inspectedItem === null}
-                      onTogglePlay={() => setIsPlaying(!isPlaying)}
-                      progress={progress}
-                    />
-                  </div>
-                </section>
-
-                <ProductSidebar
-                  currentLook={currentLook}
-                  activeHotspot={activeHotspot}
-                  onSelectHotspot={setActiveHotspot}
-                  onAddToCart={handleAddToCart}
-                  onAddBundle={handleAddBundle}
-                  onOpenItemModal={(item) => setInspectedItem(item)}
-                />
-              </main>
-            </div>
-            
-            {/* Brand Manifesto Strip */}
-            <BrandManifesto />
-
-            {/* Collection Catalog Section */}
-            <CollectionSection onAddToBag={handleAddToCart} />
-
-            {/* Trust and Press Bar */}
-            <TrustAndPressBar />
-
-            {/* Brand Visual Identity Section with Local Image */}
-            <BrandIdentitySection />
-
-            {/* Brand Footer */}
-            <BrandFooter onShowToast={showToast} />
-
-            {/* 3D Piece Inspection Modal */}
-            {inspectedItem && (
-              <ItemFlipModal
-                item={inspectedItem}
-                lookTheme={currentLook.theme}
-                onClose={() => setInspectedItem(null)}
-                onAddToCart={handleAddToCart}
-              />
-            )}
-
-            {/* Toast Notification */}
-            {toast && (
+      <Routes>
+        {/* Route 1: Home Page */}
+        <Route
+          path="/"
+          element={
+            <div className="flex flex-col w-full">
               <div
-                className="fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-3.5 rounded-2xl bg-slate-900/90 text-white backdrop-blur-md shadow-2xl flex items-center gap-3 text-sm font-semibold z-50 animate-bounce"
+                className="w-full flex flex-col relative theme-transition"
                 style={{
-                  border: `1.5px solid ${currentLook.theme.secondaryColor}`,
+                  background: currentLook.theme.bgGradient,
                 }}
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-                <span>{toast}</span>
-              </div>
-            )}
-          </div>
-        }
-      />
+                {/* Main 3D Hero Layout */}
+                <main className="flex-1 w-full flex flex-col lg:flex-row relative z-10 lg:h-[calc(100vh-4rem)] lg:overflow-hidden">
+                  <DoodleBackground theme={currentLook.theme} gender={currentLook.gender} />
 
-      {/* Route 2: Dedicated Bag & Checkout Page */}
-      <Route
-        path="/bag"
-        element={
-          <BagPage
-            cartItems={cartItems}
-            onUpdateQuantity={handleUpdateQuantity}
-            onRemoveItem={handleRemoveItem}
-          />
-        }
-      />
-    </Routes>
+                  <section className="flex-1 flex flex-col justify-between relative min-h-[640px] lg:min-h-0 lg:h-full overflow-hidden">
+                    <div className="flex-1 flex flex-col relative w-full h-full min-h-0">
+                      <Carousel3D
+                        looks={LOOKS_DATA}
+                        currentIndex={currentIndex}
+                        onSelectLook={handleSelectLook}
+                        activeHotspot={activeHotspot}
+                        onSelectHotspot={setActiveHotspot}
+                        onOpenItemModal={(item) => setInspectedItem(item)}
+                        isPaused={!isPlaying || inspectedItem !== null}
+                      />
+                    </div>
+
+                    <div className="flex-shrink-0 w-full relative z-20">
+                      <BottomControls
+                        looks={LOOKS_DATA}
+                        currentIndex={currentIndex}
+                        onSelectLook={handleSelectLook}
+                        isPlaying={isPlaying && inspectedItem === null}
+                        onTogglePlay={() => setIsPlaying(!isPlaying)}
+                        progress={progress}
+                      />
+                    </div>
+                  </section>
+
+                  <ProductSidebar
+                    currentLook={currentLook}
+                    activeHotspot={activeHotspot}
+                    onSelectHotspot={setActiveHotspot}
+                    onAddToCart={handleAddToCart}
+                    onAddBundle={handleAddBundle}
+                    onOpenItemModal={(item) => setInspectedItem(item)}
+                  />
+                </main>
+              </div>
+              
+              {/* Brand Manifesto Strip */}
+              <BrandManifesto />
+
+              {/* Collection Catalog Section */}
+              <CollectionSection onAddToBag={handleAddToCart} />
+
+              {/* Trust and Press Bar */}
+              <TrustAndPressBar />
+
+              {/* Brand Visual Identity Section */}
+              <BrandIdentitySection />
+            </div>
+          }
+        />
+
+        {/* Route 2: Dedicated Bag & Checkout Page */}
+        <Route
+          path="/bag"
+          element={
+            <BagPage
+              cartItems={cartItems}
+              onUpdateQuantity={handleUpdateQuantity}
+              onRemoveItem={handleRemoveItem}
+            />
+          }
+        />
+
+        {/* Footer Policy & Info Pages */}
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/delivery-returns" element={<DeliveryReturnsPage />} />
+        <Route path="/size-guide" element={<SizeGuidePage />} />
+        <Route path="/refund-policy" element={<RefundPolicyPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/how-to-purchase" element={<HowToPurchasePage />} />
+        <Route path="/contact" element={<ContactPage />} />
+      </Routes>
+
+      {/* Brand Footer */}
+      <BrandFooter onShowToast={showToast} />
+
+      {/* 3D Piece Inspection Modal */}
+      {inspectedItem && (
+        <ItemFlipModal
+          item={inspectedItem}
+          lookTheme={currentLook.theme}
+          onClose={() => setInspectedItem(null)}
+          onAddToCart={handleAddToCart}
+        />
+      )}
+
+      {/* Toast Notification */}
+      {toast && (
+        <div
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-3.5 rounded-2xl bg-slate-900/90 text-white backdrop-blur-md shadow-2xl flex items-center gap-3 text-sm font-semibold z-50 animate-bounce"
+          style={{
+            border: `1.5px solid ${currentLook.theme.secondaryColor}`,
+          }}
+        >
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+          <span>{toast}</span>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -248,7 +287,32 @@ function MainApp() {
 function BrandManifesto() {
   return (
     <section className="bg-[#FBF8F3] py-28 px-6 text-center border-t border-b border-[#0E2340]/10 relative overflow-hidden">
+      {/* Subtle Polka-Dot Background */}
       <div className="absolute inset-0 opacity-[0.06] pointer-events-none bg-[radial-gradient(#0E2340_1.5px,transparent_1.5px)] [background-size:18px_18px]" />
+
+      {/* Scattered Background Stars and Doodles */}
+      <div className="absolute top-8 left-[6%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[-15deg]">✨</div>
+      <div className="absolute top-12 left-[24%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[10deg]">☁️</div>
+      <div className="absolute top-7 left-[42%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[35deg]">🌙</div>
+      <div className="absolute top-10 right-[30%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[-18deg]">★</div>
+      <div className="absolute top-6 right-[12%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[12deg]">✨</div>
+      
+      <div className="absolute top-[44%] left-[5%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[-25deg]">🌙</div>
+      <div className="absolute top-[52%] left-[16%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[22deg]">✨</div>
+      <div className="absolute top-[42%] right-[7%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[15deg]">☁️</div>
+      <div className="absolute top-[55%] right-[18%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[-12deg]">★</div>
+
+      <div className="absolute bottom-10 left-[12%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[-10deg]">☁️</div>
+      <div className="absolute bottom-6 left-[32%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[25deg]">✨</div>
+      <div className="absolute bottom-8 left-[58%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[8deg]">🌙</div>
+      <div className="absolute bottom-9 right-[24%] text-2xl text-[#0E2340] opacity-[0.12] select-none pointer-events-none rotate-[22deg]">★</div>
+      <div className="absolute bottom-12 right-[8%] text-3xl text-[#0E2340] opacity-[0.1] select-none pointer-events-none rotate-[-15deg]">☁️</div>
+
+      {/* Ambient Glow Orbs */}
+      <div className="absolute top-10 left-1/4 w-96 h-96 rounded-full bg-[#FFB5C5]/[0.05] blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 right-1/4 w-96 h-96 rounded-full bg-[#B8D3F5]/[0.05] blur-3xl pointer-events-none" />
+
+      {/* Manifesto Copy */}
       <div className="max-w-3xl mx-auto space-y-4 relative z-10">
         <span className="text-xs font-bold uppercase tracking-widest text-[#0E2340]/60 flex items-center justify-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-[#0E2340]" />
@@ -297,24 +361,20 @@ function TrustAndPressBar() {
   );
 }
 
-// Brand Visual Identity Section with Local Image (Fixed Blue Night Theme)
+// Brand Visual Identity Section with Local Image
 function BrandIdentitySection() {
   return (
     <section className="relative w-full min-h-[600px] bg-[#0E2340] text-[#FBF8F3] overflow-hidden flex items-center justify-center py-28 px-6 md:px-16 border-t border-white/10">
-      {/* Background Beach & Starry Sky Image */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-65 mix-blend-luminosity"
+          className="absolute inset-0 bg-[length:200%_100%] sm:bg-cover bg-center bg-no-repeat opacity-65 mix-blend-luminosity"
           style={{
             backgroundImage: `url('/Brandidentitybackground.png')`
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0E2340] via-[#0E2340]/65 to-[#0E2340]/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0E2340] via-[#0E2340]/70 to-[#0E2340]/40" />
       </div>
 
-      {/* Floating Sparkles & Whimsical Elements */}
-
-      {/* Editorial Brand Identity Copy */}
       <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full backdrop-blur-md border border-white/20 text-[11px] font-bold uppercase tracking-[0.2em] text-amber-200 bg-white/10">
           <span>★</span> Our Story & Identity <span>★</span>
@@ -328,7 +388,7 @@ function BrandIdentitySection() {
           At <span className="font-bold text-amber-200">Little Dreams</span>, we believe childhood should feel boundless, soft, and full of wonder—like walking hand-in-hand under a starry night sky. Every stitch is tailored from gentle, organic fabrics designed to move effortlessly with your child.
         </p>
 
-        <div className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs font-semibold tracking-wider uppercase text-[#FBF8F3]/80">
+        <div className="pt-4 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs font-semibold tracking-wider uppercase text-[#FBF8F3]/80">
           <span className="flex items-center gap-2">
             <span className="text-amber-300">✦</span> Gentle on Sensitive Skin
           </span>
@@ -345,148 +405,8 @@ function BrandIdentitySection() {
     </section>
   );
 }
-//PINK-Blue_effetct
-// function BrandIdentitySection() {
-//   const [isPinkTheme, setIsPinkTheme] = useState(false);
 
-//   useEffect(() => {
-//     const timer = setInterval(() => {
-//       setIsPinkTheme((prev) => !prev);
-//     }, 5000); // يتبدل اللون تلقائياً كل 5 ثوانٍ بين الأزرق والوردي
-
-//     return () => clearInterval(timer);
-//   }, []);
-
-//   return (
-//     <section 
-//       className={`relative w-full min-h-[540px] transition-all duration-1000 ease-in-out ${
-//         isPinkTheme ? 'bg-[#581C38] text-[#FDF2F4]' : 'bg-[#0E2340] text-[#FBF8F3]'
-//       } overflow-hidden flex items-center justify-center py-24 px-6 md:px-16 border-t border-white/10`}
-//     >
-//       {/* Generated Whimsical Kids Landscape & Celestial Backdrop */}
-//       <svg
-//         className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none transition-all duration-1000"
-//         viewBox="0 0 1440 600"
-//         preserveAspectRatio="xMidYMid slice"
-//         xmlns="http://www.w3.org/2000/svg"
-//       >
-//         <defs>
-//           <radialGradient id="moonGlow" cx="80%" cy="22%" r="35%">
-//             <stop offset="0%" stopColor="#FDE68A" stopOpacity={isPinkTheme ? "0.35" : "0.28"} />
-//             <stop offset="100%" stopColor={isPinkTheme ? "#581C38" : "#0E2340"} stopOpacity="0" />
-//           </radialGradient>
-//           <linearGradient id="hillBack" x1="0" y1="0" x2="0" y2="1">
-//             <stop offset="0%" stopColor={isPinkTheme ? "#702446" : "#16325B"} />
-//             <stop offset="100%" stopColor={isPinkTheme ? "#581C38" : "#0E2340"} />
-//           </linearGradient>
-//           <linearGradient id="hillFront" x1="0" y1="0" x2="0" y2="1">
-//             <stop offset="0%" stopColor={isPinkTheme ? "#831843" : "#1E4072"} />
-//             <stop offset="100%" stopColor={isPinkTheme ? "#4C1D95" : "#0B1C34"} />
-//           </linearGradient>
-//         </defs>
-
-//         {/* Ambient Moon Glow */}
-//         <rect width="1440" height="600" fill="url(#moonGlow)" />
-
-//         {/* Crescent Moon */}
-//         <path
-//           d="M 1160 95 A 48 48 0 1 0 1215 165 A 38 38 0 1 1 1160 95 Z"
-//           fill="#FDE68A"
-//           opacity="0.85"
-//         />
-
-//         {/* Soft Illustrated Clouds */}
-//         <path
-//           d="M 180 150 Q 180 120 215 120 Q 230 95 270 95 Q 310 95 325 120 Q 365 120 370 150 Q 375 170 350 172 L 200 172 Q 175 170 180 150 Z"
-//           fill="currentColor"
-//           className={`transition-colors duration-1000 ${isPinkTheme ? 'text-[#FCE7F3]' : 'text-[#FBF8F3]'}`}
-//           opacity="0.06"
-//         />
-//         <path
-//           d="M 940 210 Q 940 188 965 188 Q 978 170 1008 170 Q 1038 170 1050 188 Q 1080 188 1084 210 Q 1088 225 1068 227 L 955 227 Q 936 225 940 210 Z"
-//           fill="currentColor"
-//           className={`transition-colors duration-1000 ${isPinkTheme ? 'text-[#FCE7F3]' : 'text-[#FBF8F3]'}`}
-//           opacity="0.05"
-//         />
-
-//         {/* Twinkling Stars */}
-//         <g fill="#FDE68A" opacity="0.7">
-//           <circle cx="140" cy="90" r="2.5" />
-//           <circle cx="310" cy="65" r="2" />
-//           <circle cx="490" cy="110" r="3" />
-//           <circle cx="680" cy="55" r="2" />
-//           <circle cx="860" cy="95" r="2.5" />
-//           <circle cx="1040" cy="70" r="2" />
-//           <circle cx="1310" cy="130" r="3" />
-//           <circle cx="240" cy="240" r="2" />
-//           <circle cx="1240" cy="260" r="2" />
-//         </g>
-
-//         {/* Rolling Storybook Hills */}
-//         <path
-//           d="M 0 430 Q 360 350 740 430 T 1440 400 L 1440 600 L 0 600 Z"
-//           fill="url(#hillBack)"
-//         />
-//         <path
-//           d="M 0 470 Q 450 530 920 450 T 1440 480 L 1440 600 L 0 600 Z"
-//           fill="url(#hillFront)"
-//         />
-
-//         {/* Playful Paper Airplane & Trail */}
-//         <path
-//           d="M 290 360 Q 420 290 540 315"
-//           fill="none"
-//           stroke="currentColor"
-//           className={`transition-colors duration-1000 ${isPinkTheme ? 'text-[#FCE7F3]' : 'text-[#FBF8F3]'}`}
-//           strokeWidth="2"
-//           strokeDasharray="6 6"
-//           opacity="0.25"
-//         />
-//         <path
-//           d="M 555 318 L 525 305 L 533 318 L 525 329 Z"
-//           fill="#FDE68A"
-//           opacity="0.7"
-//         />
-//       </svg>
-
-//       {/* Editorial Brand Identity Copy */}
-//       <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
-//         <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full backdrop-blur-md border text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-1000 ${
-//           isPinkTheme ? 'bg-white/15 border-white/30 text-amber-200' : 'bg-white/10 border-white/15 text-amber-200'
-//         }`}>
-//           <span>★</span> Our Story & Identity <span>★</span>
-//         </div>
-
-//         <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight">
-//           Made for Little Dreamers, Crafted to Last.
-//         </h2>
-
-//         <p className={`text-sm sm:text-base md:text-lg leading-relaxed font-normal max-w-2xl mx-auto transition-colors duration-1000 ${
-//           isPinkTheme ? 'text-[#FDF2F4]/90' : 'text-[#FBF8F3]/85'
-//         }`}>
-//           At <span className="font-bold text-amber-200">Little Dreams</span>, we believe childhood should feel boundless, soft, and full of wonder. Every stitch is tailored from gentle, organic fabrics designed to move with your child—from quiet bedtime stories to bold afternoon adventures.
-//         </p>
-
-//         <div className={`pt-4 flex flex-wrap items-center justify-center gap-6 text-xs font-semibold tracking-wider uppercase transition-colors duration-1000 ${
-//           isPinkTheme ? 'text-[#FDF2F4]/80' : 'text-[#FBF8F3]/75'
-//         }`}>
-//           <span className="flex items-center gap-2">
-//             <span className="text-amber-300">✦</span> Gentle on Sensitive Skin
-//           </span>
-//           <span className="hidden sm:inline opacity-25">•</span>
-//           <span className="flex items-center gap-2">
-//             <span className="text-amber-300">✦</span> Play-Proof Tailoring
-//           </span>
-//           <span className="hidden sm:inline opacity-25">•</span>
-//           <span className="flex items-center gap-2">
-//             <span className="text-amber-300">✦</span> Timeless Keepsake Pieces
-//           </span>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-// Editorial Brand Footer Component
+// Brand Footer Component
 function BrandFooter({ onShowToast }) {
   const [email, setEmail] = useState('');
   const [showSizeGuide, setShowSizeGuide] = useState(false);
@@ -532,9 +452,21 @@ function BrandFooter({ onShowToast }) {
           <div className="space-y-4">
             <h4 className="text-sm font-extrabold tracking-wider uppercase">Customer Service</h4>
             <ul className="space-y-3 text-xs text-[#0E2340]/75 font-medium">
-              <li><a href="#terms" className="hover:text-[#0E2340] font-bold transition-colors">Little Dreams Terms And Condition</a></li>
-              <li><a href="#privacy" className="hover:text-[#0E2340] font-bold transition-colors">Little Dreams Privacy Policy</a></li>
-              <li><a href="#delivery" className="hover:text-[#0E2340] font-bold transition-colors">Delivery And Returns</a></li>
+              <li>
+                <Link to="/terms" className="hover:text-[#0E2340] font-bold transition-colors">
+                  Little Dreams Terms And Condition
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy" className="hover:text-[#0E2340] font-bold transition-colors">
+                  Little Dreams Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/delivery-returns" className="hover:text-[#0E2340] font-bold transition-colors">
+                  Delivery And Returns
+                </Link>
+              </li>
               <li>
                 <button
                   type="button"
@@ -544,22 +476,38 @@ function BrandFooter({ onShowToast }) {
                   Size & Fit Guide
                 </button>
               </li>
-              <li><a href="#refund" className="hover:text-[#0E2340] font-bold transition-colors">Refund Policy</a></li>
+              <li>
+                <Link to="/refund-policy" className="hover:text-[#0E2340] font-bold transition-colors">
+                  Refund Policy
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div className="space-y-4">
             <h4 className="text-sm font-extrabold tracking-wider uppercase">About</h4>
             <ul className="space-y-3 text-xs text-[#0E2340]/75 font-medium">
-              <li><a href="#about" className="hover:text-[#0E2340] font-bold transition-colors">About Little Dreams</a></li>
-              <li><a href="#purchase" className="hover:text-[#0E2340] font-bold transition-colors">How To Purchase</a></li>
+              <li>
+                <Link to="/about" className="hover:text-[#0E2340] font-bold transition-colors">
+                  About Little Dreams
+                </Link>
+              </li>
+              <li>
+                <Link to="/how-to-purchase" className="hover:text-[#0E2340] font-bold transition-colors">
+                  How To Purchase
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div className="space-y-4">
             <h4 className="text-sm font-extrabold tracking-wider uppercase">Contact Us</h4>
             <ul className="space-y-3 text-xs text-[#0E2340]/75 font-medium">
-              <li><a href="#contact" className="hover:text-[#0E2340] font-bold transition-colors">Contact Us</a></li>
+              <li>
+                <Link to="/contact" className="hover:text-[#0E2340] font-bold transition-colors">
+                  Contact Us
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -637,6 +585,3 @@ function BrandFooter({ onShowToast }) {
     </>
   );
 }
-
-// Dedicated Bag Page Route
-

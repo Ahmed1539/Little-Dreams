@@ -454,20 +454,20 @@ export const COLLECTION_PRODUCTS = [
     price: 95.0,
     sizes: ['2', '4', '6', '8'],
     variants: [
-      {
+    {
         name: 'Sunny Yellow',
         hex: '#FDE047',
-        primaryImg: '/kids wear//girl8.png',
+        primaryImg: '/kids wear/girl8.png',
       },
       {
         name: 'Sky Blue',
         hex: '#38BDF8',
-        primaryImg: '/kids wear//girl8(2).png',
+        primaryImg: '/kids wear/girl8(2).png',
       },
       {
         name: 'Sweet Pink',
         hex: '#F472B6',
-        primaryImg: '/kids wear//girl8(3).png',
+        primaryImg: '/kids wear/girl8(3).png',
       },
     ],
   },
